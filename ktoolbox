@@ -29,4 +29,9 @@ spec:
           command: ['/usr/bin/curl', '-X', 'POST', 'http://127.0.0.1:15020/quitquitquit']
 EOF
 
-kubectl wait --for condition=Ready pod/${name} && kubectl exec -it -c toolbox ${name} /bin/bash
+command="exec /bin/bash"
+if [ "$2" != "" ]; then
+  command="$@"
+fi
+
+kubectl wait --for condition=Ready pod/${name} && kubectl exec -it -c toolbox ${name} /bin/bash -- -c "${command}"
