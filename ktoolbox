@@ -18,16 +18,21 @@ metadata:
     name: ${name}
 spec:
   restartPolicy: Never
+  terminationGracePeriodSeconds: 1
   containers:
   - image: ${image}
     imagePullPolicy: Always
     name: toolbox
+    lifecycle:
+      preStop:
+        exec:
+          command: ['/usr/bin/curl', '-X', 'POST', 'http://127.0.0.1:15020/quitquitquit']
 EOF
 
 for i in {1..10}; do
   ready=$(kubectl get pod --field-selector=status.phase=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
   if [ "${ready}" != "" ]; then
-    exec kubectl exec -it ${ready} /bin/bash
+    exec kubectl exec -it -c toolbox ${ready} /bin/bash
   fi
   echo "Waiting for pod to be ready"
   sleep 1

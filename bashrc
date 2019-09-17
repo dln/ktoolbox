@@ -1,7 +1,6 @@
 export PROMPT_COMMAND='touch /tmp'
 export PS1='\h:\W\$ '
 
-
 cat <<EOF
  _______          _ _
 |__   __|        | | |
