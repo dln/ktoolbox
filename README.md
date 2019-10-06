@@ -40,9 +40,10 @@ more conveniently, by setting the `KTOOLBOX_IMAGE` environment variable.
 ## Usage
 
 ```
-  ktoolbox [-n namespace] [cmd...]
-    -h             Display this help message.
-    -n NAMESPACE   Use given namespace instead of context default.
+  ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
+    -h                 Display this help message.
+    -n NAMESPACE       Use given namespace instead of context default.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
-    -c IMAGE           Override default container image (dlneintr/toolbox). Can also be set using KTOOLBOX_IMAGE environment variable.
+    -c IMAGE           Override default container image (dlneintr/toolbox:latest).
+                       Can also be set using KTOOLBOX_IMAGE environment variable.
 ```

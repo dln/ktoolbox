@@ -14,7 +14,8 @@ Usage:
     -h                 Display this help message.
     -n NAMESPACE       Use given namespace instead of context default.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. ${max_idle_mins} mins by default.
-    -c IMAGE           Override default container image (${image}). Can also be set using KTOOLBOX_IMAGE environment variable.
+    -c IMAGE           Override default container image (${image}).
+                       Can also be set using KTOOLBOX_IMAGE environment variable.
 EOF
 }
 
