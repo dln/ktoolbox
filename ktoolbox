@@ -2,7 +2,7 @@
 set -e
 
 name=${KTOOLBOX_NAME:-toolbox-${USER}}
-image="${KTOOLBOX_IMAGE:-dlneintr/toolbox@sha256:27bdb3719078fe076e542f898cede79c890f529f1f45901bec692ac917f91453}"
+image="${KTOOLBOX_IMAGE:-dlneintr/toolbox@sha256:70b4cdba2467b4e610f6573cd6e793b5043a671a724f5729869e8faaf5b8630b}"
 
 max_idle_mins="${KTOOLBOX_MAX_IDLE_MINS:-180}"
 namespace="${KTOOLBOX_NAMESPACE}"
