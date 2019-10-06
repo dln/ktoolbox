@@ -2,7 +2,7 @@
 set -e
 
 name=toolbox-${USER}
-image="${KTOOLBOX_IMAGE:-dlneintr/toolbox:latest}"
+image="${KTOOLBOX_IMAGE:-dlneintr/toolbox@sha256:27bdb3719078fe076e542f898cede79c890f529f1f45901bec692ac917f91453}"
 
 max_idle_mins="180"
 namespace=""
@@ -77,7 +77,6 @@ spec:
   terminationGracePeriodSeconds: 1
   containers:
   - image: ${image}
-    imagePullPolicy: Always
     name: toolbox
     lifecycle:
       preStop:
