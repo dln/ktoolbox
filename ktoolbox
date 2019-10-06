@@ -8,6 +8,9 @@ max_idle_mins="${KTOOLBOX_MAX_IDLE_MINS:-180}"
 namespace="${KTOOLBOX_NAMESPACE}"
 force=""
 
+context="$(kubectl config current-context)"
+
+
 function usage() {
   cat <<EOF
 Usage:
@@ -75,6 +78,7 @@ metadata:
     app: ktoolbox
     name: ${name}
   annotations:
+    toolbox/active.context: "${context}"
     toolbox/active.hostname: "${HOSTNAME}"
     toolbox/active.timestamp: "${timestamp}"
     toolbox/active.username: "${USER}"
@@ -106,6 +110,10 @@ spec:
     env:
     - name: PROMPT_COMMAND
       value: "touch /tmp"
+    - name: KTOOLBOX_CONTEXT
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.annotations['toolbox/active.context']
     - name: K8S_NODE_NAME
       valueFrom:
         fieldRef:
