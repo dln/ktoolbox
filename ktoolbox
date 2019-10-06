@@ -74,15 +74,23 @@ spec:
       preStop:
         exec:
           command: ['/usr/bin/curl', '-X', 'POST', 'http://127.0.0.1:15020/quitquitquit']
+    command:
+    - /bin/bash
+    - -c
+    - |
+      touch /tmp
+      while (find /tmp -maxdepth 0 -mmin -${max_idle_mins} | grep -q '^' ); do
+        sleep 60
+      done
+      echo "Toolbox has been idle for ${max_idle_mins} mins. Shutting down..."
+      curl -X POST http://127.0.0.1:15020/quitquitquit
     volumeMounts:
     - name: podinfo
       mountPath: /etc/podinfo
       readOnly: true
     env:
-    - name: MAX_IDLE_MINS
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.annotations['toolbox/max.idle.minutes']
+    - name: PROMPT_COMMAND
+      value: "touch /tmp"
     - name: K8S_NODE_NAME
       valueFrom:
         fieldRef:

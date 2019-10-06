@@ -25,9 +25,11 @@ default/toolbox-dln:~$
 Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master/ktoolbox) somewhere within your `$PATH` and make it executable.
 
 ### Customizing the container
-The container contains various useful utilities, but may be customized to taste
-(the entrypoint script is important though, as that contains the persistence and
-timeout logic). Easiest is to make a custom Dockerfile like this:
+The default container image contains various useful utilities, but may be customized to taste.
+Any image may be used as long as it has `bash` and `curl` installed, since
+these are used in the entrypoint script to handle expiration.
+
+Easiest is to make a custom Dockerfile like this:
 
 ```
 FROM dlneintr/toolbox

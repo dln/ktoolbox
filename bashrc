@@ -1,5 +1,3 @@
-export PROMPT_COMMAND='touch /tmp'
-
 if [[ -z "${K8S_NODE_NAME}" ]]; then
   export PS1='\h:\W\$ '
   cat <<EOF
@@ -23,5 +21,3 @@ else
 
 EOF
 fi
-
-touch /tmp
