@@ -2,8 +2,12 @@
 set -e
 
 if [[ -z "$KUBERNETES_SERVICE_HOST" ]]; then
-  echo "Not running on Kubernetes. Starting shell."
-  exec /bin/bash
+  command="/bin/bash"
+  if [[ -n "$*" ]]; then
+    command="$*"
+  fi
+  echo $command
+  exec /bin/bash -c "${command}"
 fi
 
 
