@@ -44,6 +44,7 @@ more conveniently, by setting the `KTOOLBOX_IMAGE` environment variable.
 ```
   ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
     -h                 Display this help message.
+    -f                 Force recreation of toolbox pod even if running.
     -n NAMESPACE       Use given namespace instead of context default.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
     -c IMAGE           Override default container image (dlneintr/toolbox:latest).

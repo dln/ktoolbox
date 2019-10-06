@@ -6,12 +6,14 @@ image="${KTOOLBOX_IMAGE:-dlneintr/toolbox:latest}"
 
 max_idle_mins="180"
 namespace=""
+force=""
 
 function usage() {
   cat <<EOF
 Usage:
   $0 [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
     -h                 Display this help message.
+    -f                 Force recreation of toolbox pod even if running.
     -n NAMESPACE       Use given namespace instead of context default.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. ${max_idle_mins} mins by default.
     -c IMAGE           Override default container image (${image}).
@@ -19,7 +21,7 @@ Usage:
 EOF
 }
 
-while getopts ":hc:i:n:" opt; do
+while getopts ":hfc:i:n:" opt; do
   case ${opt} in
     h )
       usage
@@ -34,6 +36,9 @@ while getopts ":hc:i:n:" opt; do
     c )
       image="$OPTARG"
       ;;
+    f )
+      force="1"
+      ;;
     \? )
       echo "Invalid Option: -$OPTARG" 1>&2
       usage
@@ -46,6 +51,10 @@ shift $((OPTIND -1))
 old=$(kubectl get pod --namespace "${namespace}" --field-selector=status.phase!=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
 if [ "${old}" != "" ]; then
   kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name}
+fi
+
+if [[ -n "${force}" ]]; then
+  kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name} || true
 fi
 
 timestamp=$(date)
