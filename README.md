@@ -33,11 +33,15 @@ sudo curl -L https://git.io/JeCE4 -o /usr/local/bin/ktoolbox && sudo chmod +x /u
 ## Usage
 
 ```
-  ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
+  ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [-N name] [cmd...]
     -h                 Display this help message.
     -f                 Force recreation of toolbox pod even if running.
+    -N NAME            Use given container name instead of the default (toolbox-$USER).
+                       Can also be set using KTOOLBOX_NAME environment variable.
     -n NAMESPACE       Use given namespace instead of context default.
+                       Can also be set using KTOOLBOX_NAMESPACE environment variable.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
+                       Can also be set using KTOOLBOX_MAX_IDLE_MINS environment variable.
     -c IMAGE           Override default container image (dlneintr/toolbox:latest).
                        Can also be set using KTOOLBOX_IMAGE environment variable.
 ```

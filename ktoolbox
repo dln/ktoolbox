@@ -1,27 +1,31 @@
 #!/bin/bash
 set -e
 
-name=toolbox-${USER}
+name=${KTOOLBOX_NAME:-toolbox-${USER}}
 image="${KTOOLBOX_IMAGE:-dlneintr/toolbox@sha256:27bdb3719078fe076e542f898cede79c890f529f1f45901bec692ac917f91453}"
 
-max_idle_mins="180"
-namespace=""
+max_idle_mins="${KTOOLBOX_MAX_IDLE_MINS:-180}"
+namespace="${KTOOLBOX_NAMESPACE}"
 force=""
 
 function usage() {
   cat <<EOF
 Usage:
-  $0 [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
+  $0 [-c image] [-i max_idle_mins] [-n namespace] [-N name] [cmd...]
     -h                 Display this help message.
     -f                 Force recreation of toolbox pod even if running.
+    -N NAME            Use given container name instead of the default (toolbox-$USER).
+                       Can also be set using KTOOLBOX_NAME environment variable.
     -n NAMESPACE       Use given namespace instead of context default.
+                       Can also be set using KTOOLBOX_NAMESPACE environment variable.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. ${max_idle_mins} mins by default.
+                       Can also be set using KTOOLBOX_MAX_IDLE_MINS environment variable.
     -c IMAGE           Override default container image (${image}).
                        Can also be set using KTOOLBOX_IMAGE environment variable.
 EOF
 }
 
-while getopts ":hfc:i:n:" opt; do
+while getopts ":hfc:i:n:N:" opt; do
   case ${opt} in
     h )
       usage
@@ -29,6 +33,9 @@ while getopts ":hfc:i:n:" opt; do
       ;;
     n )
       namespace="$OPTARG"
+      ;;
+    N )
+      name="$OPTARG"
       ;;
     i )
       max_idle_mins="$OPTARG"
