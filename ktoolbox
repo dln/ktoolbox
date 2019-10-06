@@ -1,21 +1,23 @@
 #!/bin/bash
 set -e
 
-function usage() {
-  cat <<EOF
-Usage:
-  $0 [-n namespace] [cmd...]
-    -h             Display this help message.
-    -n NAMESPACE   Use given namespace instead of context default.
-EOF
-}
-
 name=toolbox-${USER}
 image='dlneintr/toolbox:latest'
 
+max_idle_mins="180"
 namespace=""
 
-while getopts ":hn:" opt; do
+function usage() {
+  cat <<EOF
+Usage:
+  $0 [-i max_idle_mins] [-n namespace] [cmd...]
+    -h                 Display this help message.
+    -n NAMESPACE       Use given namespace instead of context default.
+    -i MAX_IDLE_MINS   Max idle time in minutes before exiting. ${max_idle_mins} mins by default.
+EOF
+}
+
+while getopts ":hi:n:" opt; do
   case ${opt} in
     h )
       usage
@@ -23,6 +25,9 @@ while getopts ":hn:" opt; do
       ;;
     n )
       namespace="$OPTARG"
+      ;;
+    i )
+      max_idle_mins="$OPTARG"
       ;;
     \? )
       echo "Invalid Option: -$OPTARG" 1>&2
@@ -32,7 +37,6 @@ while getopts ":hn:" opt; do
   esac
 done
 shift $((OPTIND -1))
-
 
 old=$(kubectl get pod --namespace "${namespace}" --field-selector=status.phase!=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
 if [ "${old}" != "" ]; then
@@ -50,9 +54,10 @@ metadata:
     app: ktoolbox
     name: ${name}
   annotations:
-    toolbox/active.hostname: ${HOSTNAME}
-    toolbox/active.timestamp: ${timestamp}
-    toolbox/active.username: ${USER}
+    toolbox/active.hostname: "${HOSTNAME}"
+    toolbox/active.timestamp: "${timestamp}"
+    toolbox/active.username: "${USER}"
+    toolbox/max.idle.minutes: "${max_idle_mins}"
 spec:
   restartPolicy: Never
   terminationGracePeriodSeconds: 1
@@ -69,6 +74,10 @@ spec:
       mountPath: /etc/podinfo
       readOnly: true
     env:
+    - name: MAX_IDLE_MINS
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.annotations['toolbox/max.idle.minutes']
     - name: K8S_NODE_NAME
       valueFrom:
         fieldRef:
