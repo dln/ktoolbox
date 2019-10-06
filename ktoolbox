@@ -1,16 +1,47 @@
 #!/bin/bash
 set -e
+
+function usage() {
+  cat <<EOF
+Usage:
+  $0 [-n namespace] [cmd...]
+    -h             Display this help message.
+    -n NAMESPACE   Use given namespace instead of context default.
+EOF
+}
+
 name=toolbox-${USER}
 image='dlneintr/toolbox:latest'
 
-old=$(kubectl get pod --field-selector=status.phase!=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
+namespace=""
+
+while getopts ":hn:" opt; do
+  case ${opt} in
+    h )
+      usage
+      exit 0
+      ;;
+    n )
+      namespace="$OPTARG"
+      ;;
+    \? )
+      echo "Invalid Option: -$OPTARG" 1>&2
+      usage
+      exit 1
+    ;;
+  esac
+done
+shift $((OPTIND -1))
+
+
+old=$(kubectl get pod --namespace "${namespace}" --field-selector=status.phase!=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
 if [ "${old}" != "" ]; then
-  kubectl delete pod --grace-period=0 ${name}
+  kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name}
 fi
 
 timestamp=$(date)
 
-kubectl apply --record -f - >>/dev/null <<EOF
+kubectl apply --namespace "${namespace}" --record -f - >>/dev/null <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
@@ -79,5 +110,5 @@ if [[ -n "$1" ]]; then
   command="$*"
 fi
 
-kubectl wait --for condition=Ready pod/${name} >>/dev/null
-kubectl exec -it -c toolbox ${name} /bin/bash -- -c "${command}"
+kubectl wait --namespace "${namespace}" --for condition=Ready pod/${name} >>/dev/null
+kubectl exec --namespace "${namespace}" -it -c toolbox ${name} /bin/bash -- -c "${command}"
