@@ -8,7 +8,9 @@ if [ "${old}" != "" ]; then
   kubectl delete pod --grace-period=0 ${name}
 fi
 
-kubectl apply -f - <<EOF
+timestamp=$(date)
+
+kubectl apply --record -f - >>/dev/null <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
@@ -16,6 +18,10 @@ metadata:
   labels:
     app: ktoolbox
     name: ${name}
+  annotations:
+    toolbox/active.hostname: ${HOSTNAME}
+    toolbox/active.timestamp: ${timestamp}
+    toolbox/active.username: ${USER}
 spec:
   restartPolicy: Never
   terminationGracePeriodSeconds: 1
@@ -27,11 +33,51 @@ spec:
       preStop:
         exec:
           command: ['/usr/bin/curl', '-X', 'POST', 'http://127.0.0.1:15020/quitquitquit']
+    volumeMounts:
+    - name: podinfo
+      mountPath: /etc/podinfo
+      readOnly: true
+    env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: K8S_HOST_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+    - name: K8S_POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: K8S_POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: K8S_POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+    - name: K8S_POD_SERVICE_ACCOUNT
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.serviceAccountName
+  volumes:
+  - name: podinfo
+    downwardAPI:
+      items:
+      - path: "labels"
+        fieldRef:
+          fieldPath: metadata.labels
+      - path: "annotations"
+        fieldRef:
+          fieldPath: metadata.annotations
 EOF
 
 command="exec /bin/bash"
-if [ "$2" != "" ]; then
-  command="$@"
+if [[ -n "$1" ]]; then
+  command="$*"
 fi
 
-kubectl wait --for condition=Ready pod/${name} && kubectl exec -it -c toolbox ${name} /bin/bash -- -c "${command}"
+kubectl wait --for condition=Ready pod/${name} >>/dev/null
+kubectl exec -it -c toolbox ${name} /bin/bash -- -c "${command}"
