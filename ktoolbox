@@ -136,7 +136,7 @@ spec:
           fieldPath: metadata.annotations
 EOF
 
-command="exec /bin/bash"
+command="exec /bin/bash --login"
 if [[ -n "$1" ]]; then
   command="$*"
 fi

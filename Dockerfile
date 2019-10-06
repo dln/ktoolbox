@@ -11,4 +11,4 @@ COPY --from=build /go/bin/hey /usr/local/bin/
 RUN adduser -D -u 1000 toolbox && echo 'toolbox ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/toolbox
 USER toolbox
 WORKDIR /home/toolbox
-COPY bashrc .bashrc
+COPY toolbox.sh /etc/profile.d/
