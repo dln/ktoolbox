@@ -1,6 +1,6 @@
 # Kubernetes toolbox
 
-A utility script to launch a shell in a semi-persistent pod on a cluster, with TTL.
+Launch a shell in a semi-persistent pod on a cluster, with automatic expiration when idle.
 
 When running `ktoolbox` it will check if an existing toolbox pod is running,
 then exec into it and start a bash shell. If the pod does not exist, or has
