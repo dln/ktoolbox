@@ -6,7 +6,6 @@ if [[ -z "$KUBERNETES_SERVICE_HOST" ]]; then
   if [[ -n "$*" ]]; then
     command="$*"
   fi
-  echo $command
   exec /bin/bash -c "${command}"
 fi
 

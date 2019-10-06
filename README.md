@@ -4,11 +4,10 @@ A utility script to launch a shell in a semi-persistent pod on a cluster, with T
 
 When running `ktoolbox` it will check if an existing toolbox pod is running,
 then exec into it and start a bash shell. If the pod does not exist, or has
-exited, `ktoolbox` will (re)create it before proceeding.
+exited, the script will (re)create it before proceeding.
 
-The default maximum idle time is 180 minutes, but can be customized using the
-`-i` flag.
-
+The default maximum idle time before exiting is 180 minutes, but can be
+customized using the `-i` flag.
 
 ```% ktoolbox
  _______          _ _                              Node: gke-myproject-cluster-nodes-df48b632-bcb2
@@ -25,6 +24,19 @@ default/toolbox-dln:~$
 
 Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master/ktoolbox) somewhere within your `$PATH` and make it executable.
 
+### Customizing the container
+The container contains various useful utilities, but may be customized to taste
+(the entrypoint script is important though, as that contains the persistence and
+timeout logic). Easiest is to make a custom Dockerfile like this:
+
+```
+FROM dlneintr/toolbox
+RUN sudo apk add -U --no-cache memcached redis
+```
+
+You can override the image used by ktoolbox with either the `-c` flag or,
+more conveniently, by setting the `KTOOLBOX_IMAGE` environment variable.
+
 ## Usage
 
 ```
@@ -32,4 +44,5 @@ Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master
     -h             Display this help message.
     -n NAMESPACE   Use given namespace instead of context default.
     -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
+    -c IMAGE           Override default container image (dlneintr/toolbox). Can also be set using KTOOLBOX_IMAGE environment variable.
 ```

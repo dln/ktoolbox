@@ -1,0 +1,2 @@
+FROM dlneintr/toolbox
+RUN sudo apk add -U --no-cache memcached redis
