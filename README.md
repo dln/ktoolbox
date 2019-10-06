@@ -22,9 +22,27 @@ default/toolbox-dln:~$
 
 ## Installation
 
-Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master/ktoolbox) somewhere within your `$PATH` and make it executable.
+Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master/ktoolbox)
+somewhere within your `$PATH` and make it executable. Enjoy!
 
-### Customizing the container
+### One line system-wide install:
+```
+sudo curl -L https://git.io/JeCE4 -o /usr/local/bin/ktoolbox && sudo chmod +x /usr/local/bin/ktoolbox
+```
+
+## Usage
+
+```
+  ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
+    -h                 Display this help message.
+    -f                 Force recreation of toolbox pod even if running.
+    -n NAMESPACE       Use given namespace instead of context default.
+    -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
+    -c IMAGE           Override default container image (dlneintr/toolbox:latest).
+                       Can also be set using KTOOLBOX_IMAGE environment variable.
+```
+
+## Customizing the container
 The default container image contains various useful utilities, but may be customized to taste.
 Any image may be used as long as it has `bash` and `curl` installed, since
 these are used in the entrypoint script to handle expiration.
@@ -39,14 +57,3 @@ RUN sudo apk add -U --no-cache memcached redis
 You can override the image used by ktoolbox with either the `-c` flag or,
 more conveniently, by setting the `KTOOLBOX_IMAGE` environment variable.
 
-## Usage
-
-```
-  ktoolbox [-c image] [-i max_idle_mins] [-n namespace] [cmd...]
-    -h                 Display this help message.
-    -f                 Force recreation of toolbox pod even if running.
-    -n NAMESPACE       Use given namespace instead of context default.
-    -i MAX_IDLE_MINS   Max idle time in minutes before exiting. 180 mins by default.
-    -c IMAGE           Override default container image (dlneintr/toolbox:latest).
-                       Can also be set using KTOOLBOX_IMAGE environment variable.
-```
