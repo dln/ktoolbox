@@ -156,4 +156,4 @@ if [[ -n "$1" ]]; then
 fi
 
 kubectl wait --namespace "${namespace}" --for condition=Ready pod/${name} >>/dev/null
-kubectl exec --namespace "${namespace}" -it -c toolbox ${name} /bin/bash -- -c "${command}"
+kubectl exec --namespace "${namespace}" -it -c toolbox ${name} -- /bin/bash -c "${command}"
