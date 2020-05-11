@@ -104,7 +104,7 @@ spec:
       echo "Toolbox has been idle for ${max_idle_mins} mins. Shutting down..."
       curl -X POST http://127.0.0.1:15020/quitquitquit
     volumeMounts:
-    - name: podinfo
+    - name: pod-info
       mountPath: /etc/podinfo
       readOnly: true
     env:
@@ -139,7 +139,7 @@ spec:
         fieldRef:
           fieldPath: spec.serviceAccountName
   volumes:
-  - name: podinfo
+  - name: pod-info
     downwardAPI:
       items:
       - path: "labels"
