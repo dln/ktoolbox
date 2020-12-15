@@ -8,6 +8,8 @@ RUN apk add -U bash curl drill findutils iputils jq mtr netcat-openbsd sudo tcpd
 RUN curl -L https://github.com/fullstorydev/grpcurl/releases/download/v1.4.0/grpcurl_1.4.0_linux_x86_64.tar.gz | tar -C /usr/local/bin -xz grpcurl
 COPY --from=build /go/bin/hey /usr/local/bin/
 
+COPY install-gcloud.sh install-vault.sh /usr/local/bin/
+
 RUN adduser -D -u 1000 toolbox && echo 'toolbox ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/toolbox
 USER toolbox
 WORKDIR /home/toolbox
