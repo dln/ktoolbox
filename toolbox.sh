@@ -22,3 +22,9 @@ else
 
 EOF
 fi
+cat <<EOF
+Optional installers for extra tooling:
+- install-vault.sh
+- install-gcloud.sh
+
+EOF

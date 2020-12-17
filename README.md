@@ -1,5 +1,7 @@
 # Kubernetes toolbox
 
+[![Container image on Quay](https://quay.io/repository/shelman/ktoolbox/status "Docker Repository on Quay")](https://quay.io/repository/shelman/ktoolbox)
+
 Launch a shell in a semi-persistent pod on a cluster, with automatic expiration when idle.
 
 When running `ktoolbox` it will check if an existing toolbox pod is running,
@@ -61,3 +63,12 @@ RUN sudo apk add -U --no-cache memcached redis
 You can override the image used by ktoolbox with either the `-c` flag or,
 more conveniently, by setting the `KTOOLBOX_IMAGE` environment variable.
 
+## Extra tooling
+To keep the image size down, the default container has only a few basics installed.
+However, it includes a few convenience scripts to afford download and installation
+of more tools.
+
+Included installers:
+
+- `install-gcloud.sh` -- Installs [Google Cloud SDK](https://cloud.google.com/sdk)
+- `install-vault.sh` -- Installs [Hashicorp Vault](https://vaultproject.io) CLI
