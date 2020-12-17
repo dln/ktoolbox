@@ -1,2 +1,2 @@
-FROM dlneintr/toolbox
+FROM quay.io/shelman/ktoolbox
 RUN sudo apk add -U --no-cache memcached redis
