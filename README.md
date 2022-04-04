@@ -56,7 +56,7 @@ these are used in the entrypoint script to handle expiration.
 Easiest is to make a custom Dockerfile like this:
 
 ```
-FROM dlneintr/toolbox
+FROM quay.io/shelman/ktoolbox
 RUN sudo apk add -U --no-cache memcached redis
 ```
 
@@ -71,4 +71,3 @@ of more tools.
 Included installers:
 
 - `install-gcloud.sh` -- Installs [Google Cloud SDK](https://cloud.google.com/sdk)
-- `install-vault.sh` -- Installs [Hashicorp Vault](https://vaultproject.io) CLI
