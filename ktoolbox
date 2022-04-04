@@ -2,7 +2,7 @@
 set -e
 
 name=${KTOOLBOX_NAME:-toolbox-${USER}}
-image="${KTOOLBOX_IMAGE:-quay.io/shelman/ktoolbox@sha256:2a778156d7fc94c98c1a37ef422b484a1d4b771838447e27897119ae0da2464b}"
+image="${KTOOLBOX_IMAGE:-quay.io/shelman/ktoolbox@sha256:39f0b87bf8c0397bac3ecb0e3eeaae50115d274743393a5dbb34f7fa55dd396b}"
 
 max_idle_mins="${KTOOLBOX_MAX_IDLE_MINS:-180}"
 namespace="${KTOOLBOX_NAMESPACE}"
