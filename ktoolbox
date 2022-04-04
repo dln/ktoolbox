@@ -69,7 +69,7 @@ fi
 
 timestamp=$(date)
 
-kubectl apply --namespace "${namespace}" --record -f - >>/dev/null <<EOF
+kubectl apply --namespace "${namespace}" -f - >>/dev/null <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
