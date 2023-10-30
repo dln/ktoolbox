@@ -1,0 +1,40 @@
+name: Build action
+
+on:
+  push:
+  schedule:
+    - cron: "42 4 * * *"
+
+jobs:
+  build:
+    name: Build toolbox image
+    runs-on: ubuntu-latest
+
+    # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+    permissions:
+      id-token: write
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2.1.0
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ github.token }}
+
+      - name: Generate temporary signing key
+        run: docker run --privileged -w /work -v "$PWD":/work cgr.dev/chainguard/melange keygen
+
+      - name: Build package
+        run: docker run --privileged -w /work -v "$PWD":/work cgr.dev/chainguard/melange build --arch x86_64,aarch64 --signing-key melange.rsa
+
+      - name: Publish Image
+        run: |
+          docker run -w /work -v "$PWD":/work -v "$HOME/.docker:/root/.docker" cgr.dev/chainguard/apko publish .apko.yaml \
+            ghcr.io/${{ github.repository }}:latest --arch x86_64,aarch64 -k /work/melange.rsa.pub

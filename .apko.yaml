@@ -1,0 +1,36 @@
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/edge/main
+    - https://dl-cdn.alpinelinux.org/alpine/edge/community
+    - "@local /work/packages"
+  packages:
+    - ktoolbox@local
+    - alpine-base
+    - bash
+    - binutils
+    - ca-certificates-bundle
+    - curl
+    - drill
+    - findutils
+    - hey
+    - iputils
+    - jq
+    - mtr
+    - netcat-openbsd
+    - sudo
+    - tcpdump
+environment:
+  PATH: /usr/sbin:/sbin:/usr/bin:/bin
+accounts:
+  groups:
+    - groupname: toolbox
+      gid: 10000
+  users:
+    - username: toolbox
+      uid: 10000
+  run-as: toolbox
+entrypoint:
+  command: /bin/bash -l
+archs:
+  - x86_64
+  - aarch64

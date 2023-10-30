@@ -1,0 +1,22 @@
+package:
+  name: ktoolbox
+  version: 2
+  description: "Kubernetes toolbox"
+  target-architecture:
+    - aarch64
+    - x86_64
+environment:
+  contents:
+    repositories:
+      - https://dl-cdn.alpinelinux.org/alpine/edge/main
+      - https://dl-cdn.alpinelinux.org/alpine/edge/community
+    packages:
+      - alpine-baselayout-data
+      - busybox
+      - sudo
+pipeline:
+  - runs: |
+      install -D toolbox.sh ${{targets.destdir}}/etc/profile.d/toolbox.sh
+      install -D install-gcloud.sh ${{targets.destdir}}/usr/local/bin/install-gcloud.sh
+      install -d ${{targets.destdir}}/etc/sudoers.d
+      echo 'toolbox ALL=(ALL) NOPASSWD: ALL' > ${{targets.destdir}}/etc/sudoers.d/toolbox
