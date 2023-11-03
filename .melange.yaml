@@ -13,10 +13,10 @@ environment:
     packages:
       - alpine-baselayout-data
       - busybox
-      - sudo
+      - doas
 pipeline:
   - runs: |
       install -D toolbox.sh ${{targets.destdir}}/etc/profile.d/toolbox.sh
       install -D install-gcloud.sh ${{targets.destdir}}/usr/local/bin/install-gcloud.sh
-      install -d ${{targets.destdir}}/etc/sudoers.d
-      echo 'toolbox ALL=(ALL) NOPASSWD: ALL' > ${{targets.destdir}}/etc/sudoers.d/toolbox
+      install -d ${{targets.destdir}}/etc/doas.d
+      echo 'permit nopass toolbox' > ${{targets.destdir}}/etc/doas.d/toolbox.conf

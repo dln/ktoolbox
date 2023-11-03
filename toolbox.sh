@@ -1,6 +1,8 @@
+export PATH=/home/toolbox/gcloud/google-cloud-sdk/bin:$PATH
+
 if [[ -z "${K8S_NODE_NAME}" ]]; then
-  export PS1='\h:\W\$ '
-  cat <<EOF
+	export PS1='\h:\W\$ '
+	cat <<EOF
  _______          _ _
 |__   __|        | | |
    | | ___   ___ | | |__   _____  __
@@ -10,8 +12,8 @@ if [[ -z "${K8S_NODE_NAME}" ]]; then
 
 EOF
 else
-  export PS1='${K8S_POD_NAMESPACE}/${K8S_POD_NAME}:\W\$ '
-  cat <<EOF
+	export PS1='${K8S_POD_NAMESPACE}/${K8S_POD_NAME}:\W\$ '
+	cat <<EOF
  _______          _ _                         Context: ${KTOOLBOX_CONTEXT}
 |__   __|        | | |                      Namespace: ${K8S_POD_NAMESPACE}
    | | ___   ___ | | |__   _____  __             Node: ${K8S_NODE_NAME}
@@ -24,7 +26,6 @@ EOF
 fi
 cat <<EOF
 Optional installers for extra tooling:
-- install-vault.sh
 - install-gcloud.sh
 
 EOF
