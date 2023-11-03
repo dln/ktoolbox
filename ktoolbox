@@ -2,7 +2,7 @@
 set -e
 
 name=${KTOOLBOX_NAME:-toolbox-${USER}}
-image="${KTOOLBOX_IMAGE:-quay.io/shelman/ktoolbox@sha256:39f0b87bf8c0397bac3ecb0e3eeaae50115d274743393a5dbb34f7fa55dd396b}"
+image="${KTOOLBOX_IMAGE:-ghcr.io/dln/ktoolbox@sha256:7554d12695d3ee4cdcefeb40d6c98edf00bec20f0c677bcdc67c0cb0a52aab57}"
 
 max_idle_mins="${KTOOLBOX_MAX_IDLE_MINS:-180}"
 namespace="${KTOOLBOX_NAMESPACE}"
@@ -10,9 +10,8 @@ force=""
 
 context="$(kubectl config current-context)"
 
-
 function usage() {
-  cat <<EOF
+	cat <<EOF
 Usage:
   $0 [-c image] [-i max_idle_mins] [-n namespace] [-N name] [cmd...]
     -h                 Display this help message.
@@ -29,42 +28,42 @@ EOF
 }
 
 while getopts ":hfc:i:n:N:" opt; do
-  case ${opt} in
-    h )
-      usage
-      exit 0
-      ;;
-    n )
-      namespace="$OPTARG"
-      ;;
-    N )
-      name="$OPTARG"
-      ;;
-    i )
-      max_idle_mins="$OPTARG"
-      ;;
-    c )
-      image="$OPTARG"
-      ;;
-    f )
-      force="1"
-      ;;
-    \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
-      usage
-      exit 1
-      ;;
-  esac
+	case ${opt} in
+	h)
+		usage
+		exit 0
+		;;
+	n)
+		namespace="$OPTARG"
+		;;
+	N)
+		name="$OPTARG"
+		;;
+	i)
+		max_idle_mins="$OPTARG"
+		;;
+	c)
+		image="$OPTARG"
+		;;
+	f)
+		force="1"
+		;;
+	\?)
+		echo "Invalid Option: -$OPTARG" 1>&2
+		usage
+		exit 1
+		;;
+	esac
 done
-shift $((OPTIND -1))
+shift $((OPTIND - 1))
 
 old=$(kubectl get pod --namespace "${namespace}" --field-selector=status.phase!=Running -l name=${name} --output='jsonpath={.items..metadata.name}')
 if [ "${old}" != "" ]; then
-  kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name}
+	kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name}
 fi
 
 if [[ -n "${force}" ]]; then
-  kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name} || true
+	kubectl delete pod --namespace "${namespace}" --grace-period=0 ${name} || true
 fi
 
 timestamp=$(date)
@@ -152,7 +151,7 @@ EOF
 
 command="exec /bin/bash --login"
 if [[ -n "$1" ]]; then
-  command="$*"
+	command="$*"
 fi
 
 kubectl wait --namespace "${namespace}" --for condition=Ready pod/${name} >>/dev/null
