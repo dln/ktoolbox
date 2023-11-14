@@ -1,7 +1,5 @@
 # Kubernetes toolbox
 
-[![Container image on Quay](https://quay.io/repository/shelman/ktoolbox/status "Docker Repository on Quay")](https://quay.io/repository/shelman/ktoolbox)
-
 Launch a shell in a semi-persistent pod on a cluster, with automatic expiration when idle.
 
 When running `ktoolbox` it will check if an existing toolbox pod is running,
@@ -56,7 +54,7 @@ these are used in the entrypoint script to handle expiration.
 Easiest is to make a custom Dockerfile like this:
 
 ```
-FROM quay.io/shelman/ktoolbox
+FROM ghcr.io/dln/ktoolbox
 RUN sudo apk add -U --no-cache memcached redis
 ```
 
