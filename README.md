@@ -22,7 +22,7 @@ default/toolbox-dln:~$
 
 ## Installation
 
-Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/master/ktoolbox)
+Copy [the ktoolbox script](https://raw.githubusercontent.com/dln/ktoolbox/main/ktoolbox)
 somewhere within your `$PATH` and make it executable. Enjoy!
 
 ### One line system-wide install:
