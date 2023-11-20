@@ -1,4 +1,4 @@
-# Kubernetes toolbox
+# Kubernetes Toolbox
 
 Launch a shell in a semi-persistent pod on a cluster, with automatic expiration when idle.
 
